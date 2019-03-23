@@ -6,10 +6,10 @@ from keras import backend as K
 from keras.callbacks import ModelCheckpoint
 from keras.models import save_model,load_model
 
-import densenet
+from densenet_fast import create_dense_net
 
 batch_size = 32
-nb_classes = 240
+nb_classes = 10
 nb_epoch = 10
 
 img_rows , img_cols = 28,28
@@ -47,14 +47,9 @@ if os.path.exists(filepath):
     model = load_model(filepath)
     print(1)
 else:
-    model = densenet.DenseNet(include_top=False,
-                          input_shape=input_shape,
-                          classes=nb_classes,
-                          depth=40,
-                          growth_rate=12,
-                          bottleneck=True,
-                          dropout_rate=0.3,
-                          )
+    model = create_dense_net(nb_classes=nb_classes,
+                             img_dim=input_shape,
+                             dropout_rate=0.5)
 model.compile(loss='categorical_crossentropy',
               optimizer='adadelta',
               metrics=['accuracy'])
