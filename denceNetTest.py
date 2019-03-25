@@ -2,17 +2,18 @@ import os
 
 from keras.callbacks import ModelCheckpoint
 from keras.engine.saving import load_model
+from keras.models import save_model,load_model
 
 import densenet
 from keras.preprocessing.image import ImageDataGenerator
 
 from densenet_fast import create_dense_net
 
-imagePath = 'F:\Event&NoEvent'
-img_width,img_height = 224,224
+imagePath = 'D:\Event&NoEvent'
+img_width,img_height = 32,32
 batch_size = 32
-nb_train_samples = 200
-epochs = 50
+nb_train_samples = 2000
+epochs = 1
 
 
 datagen = ImageDataGenerator(rescale=1./255,
@@ -20,7 +21,7 @@ datagen = ImageDataGenerator(rescale=1./255,
                              )
 
 data_generator = datagen.flow_from_directory(directory=imagePath,
-                            target_size=(32,32),
+                            target_size=(img_width,img_height),
                             class_mode='binary',
                             batch_size=batch_size)
 
@@ -31,21 +32,24 @@ check_point = ModelCheckpoint(filepath=filepath,
                               save_best_only='True',
                               mode='max')
 
-image_dim = (32, 32, 3)
-# model = densenet.DenseNet(include_top=False,
-#                           input_shape=image_dim,
-#                           classes=2,
-#                           depth=40,
-#                           growth_rate=12,
-#                           bottleneck=True,
-#                           dropout_rate=0.5,
-#                           )
+image_dim = (img_width,img_height, 3)
 if os.path.exists(filepath):
     model = load_model(filepath)
 else:
-    model = create_dense_net(nb_classes=1,
-                             img_dim=image_dim,
-                             dropout_rate=0.5)
+    # model = create_dense_net(nb_classes=1,
+    #                          img_dim=image_dim,
+    #                          dropout_rate=0.5)
+    model = densenet.DenseNet(image_dim,classes=1,activation='sigmoid')
+
+filepath='weights.best.hdf5'
+check_point = ModelCheckpoint(filepath=filepath,
+                              monitor='val_acc',
+                              verbose=1,
+                              save_best_only='True',
+                              mode='max')
+callbacks_list = [check_point]
+
+
 model.summary()
 model.compile(loss='binary_crossentropy',
               optimizer='adadelta',
@@ -53,6 +57,6 @@ model.compile(loss='binary_crossentropy',
 
 
 model.fit_generator(data_generator,
-                    # steps_per_epoch=nb_train_samples//batch_size,
-                    epochs=epochs)
-model.save_model('first_try.h5')
+                    steps_per_epoch=nb_train_samples//batch_size,
+                    epochs=epochs,
+                    callbacks=callbacks_list)
