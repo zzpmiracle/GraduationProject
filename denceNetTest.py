@@ -9,11 +9,11 @@ from keras.preprocessing.image import ImageDataGenerator
 
 from densenet_fast import create_dense_net
 
-imagePath = 'D:\Event&NoEvent'
+imagePath = 'F:\Event&NoEvent'
 img_width,img_height = 32,32
 batch_size = 32
-nb_train_samples = 2000
-epochs = 1
+nb_train_samples = 5000
+epochs = 20
 
 
 datagen = ImageDataGenerator(rescale=1./255,
@@ -38,12 +38,12 @@ if os.path.exists(filepath):
 else:
     # model = create_dense_net(nb_classes=1,
     #                          img_dim=image_dim,
-    #                          dropout_rate=0.5)
+    #                          )
     model = densenet.DenseNet(image_dim,classes=1,activation='sigmoid')
 
 filepath='weights.best.hdf5'
 check_point = ModelCheckpoint(filepath=filepath,
-                              monitor='val_acc',
+                              monitor='acc',
                               verbose=1,
                               save_best_only='True',
                               mode='max')
@@ -52,7 +52,7 @@ callbacks_list = [check_point]
 
 model.summary()
 model.compile(loss='binary_crossentropy',
-              optimizer='adadelta',
+              optimizer='adam',
               metrics=['accuracy'])
 
 
