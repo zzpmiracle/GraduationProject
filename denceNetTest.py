@@ -1,16 +1,12 @@
 import os
 
 from keras.callbacks import ModelCheckpoint
-from keras.engine.saving import load_model
-from keras.models import save_model,load_model
+from keras.models import load_model
 
 import densenet
 from keras.preprocessing.image import ImageDataGenerator
-
-from densenet_fast import create_dense_net
-
 imagePath = 'F:\Event&NoEvent'
-img_width,img_height = 32,32
+img_width, img_height = 32, 32
 batch_size = 32
 nb_train_samples = 5000
 epochs = 20

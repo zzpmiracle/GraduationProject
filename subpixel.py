@@ -3,8 +3,7 @@ from __future__ import absolute_import
 from keras.engine import Layer
 from keras.utils.generic_utils import get_custom_objects
 from keras.backend import normalize_data_format
-import tensorflow_backend as K_BACKEND
-
+import tensorflow as tf
 
 class SubPixelUpscaling(Layer):
     """ Sub-pixel convolutional upscaling layer based on the paper "Real-Time Single Image
@@ -55,16 +54,15 @@ class SubPixelUpscaling(Layer):
         pass
 
     def call(self, x, mask=None):
-        y = K_BACKEND.depth_to_space(x, self.scale_factor, self.data_format)
+
+        # y = K_BACKEND.depth_to_space(x, self.scale_factor, self.data_format)
+        data_format = 'NHWC'.lower()
+        y = tf.depth_to_space(x, self.scale_factor, data_format=data_format)
         return y
 
     def compute_output_shape(self, input_shape):
-        if self.data_format == 'channels_first':
-            b, k, r, c = input_shape
-            return (b, k // (self.scale_factor ** 2), r * self.scale_factor, c * self.scale_factor)
-        else:
-            b, r, c, k = input_shape
-            return (b, r * self.scale_factor, c * self.scale_factor, k // (self.scale_factor ** 2))
+        b, r, c, k = input_shape
+        return (b, r * self.scale_factor, c * self.scale_factor, k // (self.scale_factor ** 2))
 
     def get_config(self):
         config = {'scale_factor': self.scale_factor,
