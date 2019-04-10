@@ -2,12 +2,18 @@ import os
 
 from keras.callbacks import ModelCheckpoint
 from keras.models import load_model
-
+from keras.applications import resnet50
 from keras.utils import plot_model
 from matplotlib import pyplot as plt
 import math
 import densenet
 from keras.preprocessing.image import ImageDataGenerator
+
+from numpy.random import seed
+seed(2)
+
+from tensorflow import set_random_seed
+set_random_seed(2)
 
 train_image_path = 'D:\\Event&NoEvent\\train'
 test_image_path = 'D:\\Event&NoEvent\\test'
@@ -17,8 +23,8 @@ nb_test_samples = 500
 img_width, img_height = 32, 32
 image_dim = (img_width,img_height, 3)
 
-batch_size = 32
-epochs = 20
+batch_size = 64
+epochs = 10
 
 train_data_gen = ImageDataGenerator(rescale=1./255,
                              validation_split=0.2
@@ -38,15 +44,13 @@ else:
                               classes=1,
                               # depth=28,
                               activation='sigmoid',
-                              # bottleneck=True,
-                              # dropout_rate=0.5
+
                               )
 
 model.summary()
 model.compile(loss='binary_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
-# plot_model(model, to_file='model.png')
 
 check_point = ModelCheckpoint(filepath=filepath,
                               monitor='acc',
@@ -54,14 +58,13 @@ check_point = ModelCheckpoint(filepath=filepath,
                               save_best_only='False',
                               mode='max')
 
-# history = model.fit_generator(train_data_generator,
-#                     steps_per_epoch=math.ceil(nb_train_samples/batch_size),
-#                     epochs=epochs,
-#                     # callbacks=[check_point],
-#                     verbose=2)
-# print(history.history)
-# model.save(filepath)
-
+history = model.fit_generator(train_data_generator,
+                    steps_per_epoch=math.ceil(nb_train_samples/batch_size),
+                    epochs=epochs,
+                    # callbacks=[check_point],
+                    verbose=2)
+print(history.history)
+model.save(filepath)
 
 
 # # 绘制训练 & 验证的准确率值
