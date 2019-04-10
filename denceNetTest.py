@@ -5,7 +5,7 @@ from keras.models import load_model
 
 from keras.utils import plot_model
 from matplotlib import pyplot as plt
-
+import math
 import densenet
 from keras.preprocessing.image import ImageDataGenerator
 
@@ -49,38 +49,36 @@ check_point = ModelCheckpoint(filepath=filepath,
                               save_best_only='True',
                               mode='max')
 
-history = model.fit_generator(train_data_generator,
-                    steps_per_epoch=nb_train_samples//batch_size+1,
-                    epochs=epochs,
-                    callbacks=[check_point])
-print(history.history)
-# 绘制训练 & 验证的准确率值
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
-plt.title('Model accuracy')
-plt.ylabel('Accuracy')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
-plt.show()
+# history = model.fit_generator(train_data_generator,
+#                     steps_per_epoch=math.ceil(nb_train_samples/batch_size),
+#                     epochs=epochs,
+#                     callbacks=[check_point])
+# print(history.history)
+# # 绘制训练 & 验证的准确率值
+# plt.plot(history.history['acc'])
+# plt.plot(history.history['val_acc'])
+# plt.title('Model accuracy')
+# plt.ylabel('Accuracy')
+# plt.xlabel('Epoch')
+# plt.legend(['Train', 'Test'], loc='upper left')
+# plt.show()
 
-# 绘制训练 & 验证的损失值
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('Model loss')
-plt.ylabel('Loss')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
-plt.show()
+# # 绘制训练 & 验证的损失值
+# plt.plot(history.history['loss'])
+# plt.plot(history.history['val_loss'])
+# plt.title('Model loss')
+# plt.ylabel('Loss')
+# plt.xlabel('Epoch')
+# plt.legend(['Train', 'Test'], loc='upper left')
+# plt.show()
 
 
-test_data_gen = ImageDataGenerator(rescale=1./255,
-                             validation_split=0.3
-                             )
+test_data_gen = ImageDataGenerator(rescale=1./255)
 
-test_data_generator = train_data_gen.flow_from_directory(directory=train_image_path,
+test_data_generator = test_data_gen.flow_from_directory(directory=test_image_path,
                             target_size=(img_width,img_height),
                             class_mode='binary',
                             batch_size=batch_size)
 score = model.evaluate_generator(test_data_generator,
-                                 steps=nb_tests_samples//batch_size+1)
+                                 steps=math.ceil(nb_tests_samples/batch_size))
 print(score[-1])
