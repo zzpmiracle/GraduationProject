@@ -36,7 +36,7 @@ if os.path.exists(filepath):
 else:
     model = densenet.DenseNet(image_dim,
                               classes=1,
-                              depth=28,
+                              # depth=28,
                               activation='sigmoid',
                               # bottleneck=True,
                               # dropout_rate=0.5
@@ -54,14 +54,14 @@ check_point = ModelCheckpoint(filepath=filepath,
                               save_best_only='False',
                               mode='max')
 
-history = model.fit_generator(train_data_generator,
-                    steps_per_epoch=math.ceil(nb_train_samples/batch_size),
-                    epochs=epochs,
-                    # callbacks=[check_point],
-                    verbose=0)
+# history = model.fit_generator(train_data_generator,
+#                     steps_per_epoch=math.ceil(nb_train_samples/batch_size),
+#                     epochs=epochs,
+#                     # callbacks=[check_point],
+#                     verbose=2)
+# print(history.history)
+# model.save(filepath)
 
-model.save(filepath)
-print(history.history)
 
 
 # # 绘制训练 & 验证的准确率值
@@ -91,4 +91,5 @@ test_data_generator = test_data_gen.flow_from_directory(directory=test_image_pat
                             batch_size=batch_size)
 score = model.evaluate_generator(test_data_generator,
                                  steps=math.ceil(nb_test_samples/batch_size))
+
 print(score[-1])
