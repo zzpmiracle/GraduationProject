@@ -6,7 +6,7 @@ from keras.applications import resnet50
 from keras.utils import plot_model
 from matplotlib import pyplot as plt
 import math
-import densenet
+from resnext.resnext import ResNext
 from keras.preprocessing.image import ImageDataGenerator
 
 from numpy.random import seed
@@ -40,12 +40,9 @@ filepath='weights.best.hdf5'
 if os.path.exists(filepath):
     model = load_model(filepath)
 else:
-    model = densenet.DenseNet(image_dim,
-                              classes=1,
-                              # depth=28,
-                              activation='sigmoid',
-
-                              )
+    model = ResNext(input_shape=image_dim,
+                    classes=2,
+                    )
 
 model.summary()
 model.compile(loss='binary_crossentropy',
