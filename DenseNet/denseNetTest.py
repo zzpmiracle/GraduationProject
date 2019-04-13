@@ -42,7 +42,7 @@ if os.path.exists(filepath):
 else:
     model =DenseNet(image_dim,
                     classes=1,
-                    # depth=28,
+                    depth=19,
                     activation='sigmoid',
                     )
 

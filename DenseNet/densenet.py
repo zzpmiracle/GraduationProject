@@ -21,7 +21,7 @@ from keras.engine.topology import get_source_inputs
 from keras_applications.imagenet_utils import _obtain_input_shape
 import keras.backend as K
 
-from subpixel import SubPixelUpscaling
+from DenseNet.subpixel import SubPixelUpscaling
 
 
 def DenseNet(input_shape=None, depth=40, nb_dense_block=3, growth_rate=12, nb_filter=-1, nb_layers_per_block=-1,

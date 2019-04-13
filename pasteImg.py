@@ -15,13 +15,13 @@ def random_cutFile(srcPath,dstPath,numfiles):
 
 
 nums_per_class = 250
-srcPath='F:\\Event&NoEvent\\train\\Even_spec_224\\'
-dstPath = "F:\\Event&NoEvent\\test\\Even_spec_224\\"
+srcPath='D:\\Event&NoEvent\\train\\Even_spec_224\\'
+dstPath = "D:\\Event&NoEvent\\validation\\Even_spec_224\\"
 random_cutFile(srcPath,dstPath,nums_per_class)
 
 
-srcPath='F:\\Event&NoEvent\\train\\No_event_spec_224\\'
-dstPath = "F:\\Event&NoEvent\\test\\No_event_spec_224\\"
+srcPath='D:\\Event&NoEvent\\train\\No_event_spec_224\\'
+dstPath = "D:\\Event&NoEvent\\validation\\No_event_spec_224\\"
 random_cutFile(srcPath,dstPath,nums_per_class)
 
 
