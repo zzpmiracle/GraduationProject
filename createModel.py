@@ -103,21 +103,20 @@ ResNet_history = ResNet_model.fit_generator(train_data_generator,
 
 # 绘制训练 & 验证的准确率值
 plt.figure()
-plt.plot(DenseNet_history.history['acc'],label='DenseNet',color='g')
-plt.plot(ResNet_history.history['acc'],label='ResNet',color='r')
-
-# plt.plot(history.history['loss'])
-plt.title('Model accuracy')
+plt.plot(DenseNet_history.history['acc'],label='DenseNet_acc',color='g')
+plt.plot(DenseNet_history.history['val_acc'],label='DenseNet_val_acc',color='r')
+plt.title('DenseNet Model accuracy')
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(loc='best')
 plt.show()
 
-# 绘制训练 & 验证的损失值
-plt.plot(history.history['loss'])
-# plt.plot(history.history['val_loss'])
-plt.title('Model loss')
-plt.ylabel('Loss')
+plt.figure()
+plt.plot(ResNet_history.history['acc'],label='ResNet_acc',color='g')
+plt.plot(ResNet_history.history['val_acc'],label='ResNet_val_acc',color='r')
+plt.title('ResNet Model accuracy')
+plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
+plt.legend(loc='best')
 plt.show()
+
