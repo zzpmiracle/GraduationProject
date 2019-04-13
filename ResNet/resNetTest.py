@@ -16,22 +16,30 @@ seed(2)
 from tensorflow import set_random_seed
 set_random_seed(2)
 
+
 train_image_path = 'D:\\Event&NoEvent\\train'
+val_image_path = 'D:\\Event&NoEvent\\validation'
 test_image_path = 'D:\\Event&NoEvent\\test'
-nb_train_samples = 4500
+
+nb_train_samples = 4000
+nb_val_samples = 500
 nb_test_samples = 500
 
 img_width, img_height = 32,32
 image_dim = (img_width,img_height, 3)
 
-batch_size = 64
+batch_size = 32
 epochs = 60
 
-train_data_gen = ImageDataGenerator(rescale=1./255,
-                             validation_split=0.1
-                             )
-
-train_data_generator = train_data_gen.flow_from_directory(directory=train_image_path,
+train_data_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(directory=train_image_path,
+                                                          target_size=(img_width,img_height),
+                                                          class_mode='binary',
+                                                          batch_size=batch_size)
+val_data_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(directory=val_image_path,
+                            target_size=(img_width,img_height),
+                            class_mode='binary',
+                            batch_size=batch_size)
+test_data_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(directory=test_image_path,
                             target_size=(img_width,img_height),
                             class_mode='binary',
                             batch_size=batch_size)
@@ -51,7 +59,7 @@ model.compile(loss='binary_crossentropy',
               metrics=['accuracy'])
 
 check_point = ModelCheckpoint(filepath=filepath,
-                              monitor='acc',
+                              monitor='val_acc',
                               verbose=1,
                               save_best_only='False',
                               mode='max')
@@ -59,8 +67,10 @@ check_point = ModelCheckpoint(filepath=filepath,
 history = model.fit_generator(train_data_generator,
                     steps_per_epoch=math.ceil(nb_train_samples/batch_size),
                     epochs=epochs,
-                    # callbacks=[check_point],
-                    verbose=2)
+                    callbacks=[check_point],
+                    verbose=1,
+                            validation_data=val_data_generator,
+                              validation_steps=math.ceil(nb_val_samples/batch_size))
 print(history.history)
 model.save(filepath)
 
@@ -90,7 +100,6 @@ test_data_generator = test_data_gen.flow_from_directory(directory=test_image_pat
                             target_size=(img_width,img_height),
                             class_mode='binary',
                             batch_size=batch_size)
-score = model.evaluate_generator(test_data_generator,
-                                 steps=math.ceil(nb_test_samples/batch_size))
+score = model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
 
 print(score[-1])

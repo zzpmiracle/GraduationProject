@@ -1,6 +1,6 @@
 import os
 from DenseNet.densenet import DenseNet
-from ResNet import resnet_v2
+from ResNet.ResNet import resnet_v2
 
 from keras.callbacks import ModelCheckpoint
 from keras.models import load_model
@@ -28,7 +28,7 @@ img_width, img_height = 32, 32
 image_dim = (img_width,img_height, 3)
 
 batch_size = 64
-epochs = 10
+epochs = 100
 
 # train_data_gen = ImageDataGenerator(rescale=1./255)
 train_data_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(directory=train_image_path,
@@ -74,7 +74,15 @@ DenseNet_history = DenseNet_model.fit_generator(train_data_generator,
                                                 validation_data=val_data_generator,
                                                 validation_steps=math.ceil(nb_val_samples / batch_size)
                                                 )
-
+# 绘制训练 & 验证的准确率值
+plt.figure()
+plt.plot(DenseNet_history.history['acc'],label='DenseNet_acc',color='g')
+plt.plot(DenseNet_history.history['val_acc'],label='DenseNet_val_acc',color='r')
+plt.title('DenseNet Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(loc='best')
+plt.show()
 
 if os.path.exists(ResNet_file_path):
     ResNet_model = load_model(ResNet_file_path)
@@ -101,15 +109,7 @@ ResNet_history = ResNet_model.fit_generator(train_data_generator,
 
 
 
-# 绘制训练 & 验证的准确率值
-plt.figure()
-plt.plot(DenseNet_history.history['acc'],label='DenseNet_acc',color='g')
-plt.plot(DenseNet_history.history['val_acc'],label='DenseNet_val_acc',color='r')
-plt.title('DenseNet Model accuracy')
-plt.ylabel('Accuracy')
-plt.xlabel('Epoch')
-plt.legend(loc='best')
-plt.show()
+
 
 plt.figure()
 plt.plot(ResNet_history.history['acc'],label='ResNet_acc',color='g')
@@ -120,3 +120,5 @@ plt.xlabel('Epoch')
 plt.legend(loc='best')
 plt.show()
 
+DenseNet_score = DenseNet_model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
+ResNet_score = ResNet_model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
