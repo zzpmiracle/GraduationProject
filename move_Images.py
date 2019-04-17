@@ -1,8 +1,3 @@
-'''
-1. read the whole files under a certain folder
-2. chose 10000 files randomly
-3. copy them to another folder and save
-'''
 import os, random, shutil
 
 def random_cutFile(srcPath,dstPath,numfiles):
