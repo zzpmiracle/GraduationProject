@@ -44,7 +44,7 @@ test_data_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(dir
                             class_mode='binary',
                             batch_size=batch_size)
 
-DenseNet_file_path = 'denseNet64.hdf5'
+DenseNet_file_path = 'denseNet.hdf5'
 ResNet_file_path = 'ResNet.hdf5'
 
 
@@ -126,3 +126,4 @@ print(DenseNet_score[-1])
 # plt.show()
 #
 # ResNet_score = ResNet_model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
+# print(ResNet_score[-1])
