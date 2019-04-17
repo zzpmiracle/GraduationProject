@@ -24,7 +24,7 @@ nb_train_samples = 4000
 nb_val_samples = 500
 nb_test_samples = 500
 
-img_width, img_height = 64,64
+img_width, img_height = 32,32
 image_dim = (img_width,img_height, 3)
 
 batch_size = 32
@@ -44,8 +44,8 @@ test_data_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(dir
                             class_mode='binary',
                             batch_size=batch_size)
 
-DenseNet_file_path = 'denseNet.hdf5'
-ResNet_file_path = 'ResNet.hdf5'
+DenseNet_file_path = 'denseNet13layer.hdf5'
+ResNet_file_path = 'ResNet29layer.hdf5'
 
 
 if os.path.exists(DenseNet_file_path):
@@ -53,7 +53,7 @@ if os.path.exists(DenseNet_file_path):
 else:
     DenseNet_model =DenseNet(image_dim,
                              classes=1,
-                             depth=28,
+                             depth=13,
                              activation='sigmoid',
                              )
 DenseNet_model.compile(loss='binary_crossentropy',
@@ -92,7 +92,7 @@ print(DenseNet_score[-1])
 # if os.path.exists(ResNet_file_path):
 #     ResNet_model = load_model(ResNet_file_path)
 # else:
-#     ResNet_model = resnet_v2(depth=20,
+#     ResNet_model = resnet_v2(depth=29,
 #                              num_classes=1,
 #                              input_shape=image_dim)
 # ResNet_model.compile(loss='binary_crossentropy',
