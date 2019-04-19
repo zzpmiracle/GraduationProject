@@ -5,7 +5,7 @@ from keras.utils import plot_model
 from matplotlib import pyplot as plt
 import math
 from keras.preprocessing.image import ImageDataGenerator
-DenseNet_file_path = './trained_models/denseNet_19layer96.4.hdf5'
+DenseNet_file_path = './trained_models/denseNet96.2.hdf5'
 test_image_path = 'D:\\Event&NoEvent\\test'
 nb_train_samples = 4000
 nb_val_samples = 500
@@ -27,13 +27,11 @@ DenseNet_model.compile(loss='binary_crossentropy',
                        optimizer='Adadelta',
                        metrics=['accuracy'])
 result = DenseNet_model.predict_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
-result = result[:]<0.5
-true = []
-for i in range(250):
-    true.append([True])
-for i in range(250):
-    true.append([False])
-acc = np.sum(result==true)/500
 
-# print(result)
-print(acc)
+result = result[:]<0.5
+
+answer = [[True] for i in range(250)]
+answer.extend([[False] for i in range(250)])
+
+acc = float(np.sum(result==answer)/500)
+print('%.1f%%' % (acc * 100))
