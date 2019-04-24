@@ -4,37 +4,14 @@ from time import time
 import numpy as np
 import matplotlib.pyplot as plt
 import soundfile as sf
-from openvino.inference_engine import IENetwork, IEPlugin
-
-
-model_xml = "/home/haoxuewu/PycharmProjects/classifier_new/audio_test/model/model.xml"
-model_bin = "/home/haoxuewu/PycharmProjects/classifier_new/audio_test/model/model.bin"
 
 # 获取音频数据
 data, samplerate = sf.read('/home/haoxuewu/PycharmProjects/classifier_new/audio_test/cr_20181025-161858.wav')
 data = data.reshape((-1, 2))
 data = data.mean(axis=1)
 len_data = len(data)
-# Plugin initialization for specified device and load extensions library if specified
-plugin = IEPlugin(device="MYRIAD", plugin_dirs=None)
-
-# Read IR
-print("Loading network files:\n\t{}\n\t{}".format(model_xml, model_bin))
-net = IENetwork(model=model_xml, weights=model_bin)
-
-# Loading model to the plugin
-print("Loading model to the plugin ...")
-exec_net = plugin.load(network=net)
-
-# assert len(net.inputs.keys()) == 1, "Sample supports only single input topologies"
-# assert len(net.outputs) == 1, "Sample supports only single output topologies"
-
-print("Preparing input blobs ...")
-input_blob = next(iter(net.inputs))
-out_blob = next(iter(net.outputs))
 
 # Read and pre-process input images
-n, c, h, w = net.inputs[input_blob].shape
 image = np.ndarray(shape=(n, c, h, w))
 l = 0
 t0 = time()
