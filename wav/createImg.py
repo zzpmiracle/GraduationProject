@@ -4,6 +4,7 @@ from time import time
 import numpy as np
 import matplotlib.pyplot as plt
 import soundfile as sf
+from keras.preprocessing import image
 
 # 获取音频数据
 data, samplerate = sf.read('cr_20181025-161858.wav')

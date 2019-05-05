@@ -1,4 +1,3 @@
-import re
 
 import numpy as np
 from keras.models import load_model
@@ -39,7 +38,6 @@ for i in range(len(result)):
         begin_time_sec = int(l / 2000 % 60)
         end_time_min = int(np.floor((l + 30000) / 2000 / 60))
         end_time_sec = int((l + 30000) / 2000 % 60)
-        l = l + 30000
         print('{}:{} to {}:{} happened an event!'.format(begin_time_min, begin_time_sec, end_time_min, end_time_sec))
 result = result[:] < 0.5
 print(result)
