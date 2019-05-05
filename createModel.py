@@ -59,7 +59,7 @@ DenseNet_model.compile(loss='binary_crossentropy',
                        optimizer='Adadelta',
                        metrics=['accuracy'])
 
-plot_model(DenseNet_model, to_file='denseNet_model.png',show_layer_names=False,show_shapes=True)
+#plot_model(DenseNet_model, to_file='denseNet_model.png',show_layer_names=False,show_shapes=True)
 
 DenseNet_check_point = ModelCheckpoint(filepath=DenseNet_file_path,
                               monitor='val_acc',
