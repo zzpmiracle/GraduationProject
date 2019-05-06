@@ -1,4 +1,5 @@
 import os
+import time
 from DenseNet.densenet import DenseNet
 from ResNet.ResNet import resnet_v2
 
@@ -52,7 +53,6 @@ if os.path.exists(DenseNet_file_path):
 else:
     DenseNet_model =DenseNet(image_dim,
                              classes=1,
-                             depth=28,
                              activation='sigmoid',
                              )
 DenseNet_model.compile(loss='binary_crossentropy',
@@ -66,6 +66,7 @@ DenseNet_check_point = ModelCheckpoint(filepath=DenseNet_file_path,
                               verbose=1,
                               save_best_only='True',
                               mode='max')
+Dense_start = time.time()
 DenseNet_history = DenseNet_model.fit_generator(train_data_generator,
                                                 steps_per_epoch=math.ceil(nb_train_samples/batch_size),
                                                 epochs=epochs,
@@ -74,6 +75,9 @@ DenseNet_history = DenseNet_model.fit_generator(train_data_generator,
                                                 validation_data=val_data_generator,
                                                 validation_steps=math.ceil(nb_val_samples / batch_size)
                                                 )
+Dense_end = time.time()
+Dense_time = Dense_end - Dense_start
+
 # # 绘制训练 & 验证的准确率值
 # plt.figure()
 # plt.plot(DenseNet_history.history['acc'],label='DenseNet_acc',color='g')
@@ -87,39 +91,32 @@ DenseNet_history = DenseNet_model.fit_generator(train_data_generator,
 
 DenseNet_score = DenseNet_model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
 print(DenseNet_score[-1])
-
-if os.path.exists(ResNet_file_path):
-    ResNet_model = load_model(ResNet_file_path)
-else:
-    ResNet_model = resnet_v2(depth=38,
-                             num_classes=1,
-                             input_shape=image_dim)
-ResNet_model.compile(loss='binary_crossentropy',
-                     optimizer='Adadelta',
-                     metrics=['accuracy'])
-# plot_model(ResNet_model, to_file='ResNet_model.png',show_layer_names=False,show_shapes=True)
-ResNet_check_point = ModelCheckpoint(filepath=ResNet_file_path,
-                              monitor='val_acc',
-                              verbose=1,
-                              save_best_only='True',
-                              mode='max')
-ResNet_history = ResNet_model.fit_generator(train_data_generator,
-                                            steps_per_epoch=math.ceil(nb_train_samples/batch_size),
-                                            epochs=epochs,
-                                            verbose=2,
-                                            callbacks=[ResNet_check_point],
-                                            validation_data=val_data_generator,
-                                            validation_steps=math.ceil(nb_val_samples/batch_size))
-# plt.figure()
-# plt.plot(ResNet_history.history['acc'],label='ResNet_acc',color='g')
-# plt.plot(ResNet_history.history['val_acc'],label='ResNet_val_acc',color='r')
-# plt.plot(ResNet_history.history['loss'],label='ResNet_loss',color='g', linestyle='--')
-# plt.plot(ResNet_history.history['val_loss'],label='ResNet_val_loss',color='r',linestyle='--')
-# plt.title('ResNet Model')
-# plt.ylabel('Accuracy')
-# plt.xlabel('Epoch')
-# plt.legend(loc='best')
-# plt.show()
-
-ResNet_score = ResNet_model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
-print(ResNet_score[-1])
+#
+# if os.path.exists(ResNet_file_path):
+#     ResNet_model = load_model(ResNet_file_path)
+# else:
+#     ResNet_model = resnet_v2(depth=38,
+#                              num_classes=1,
+#                              input_shape=image_dim)
+# ResNet_model.compile(loss='binary_crossentropy',
+#                      optimizer='Adadelta',
+#                      metrics=['accuracy'])
+# # plot_model(ResNet_model, to_file='ResNet_model.png',show_layer_names=False,show_shapes=True)
+# ResNet_check_point = ModelCheckpoint(filepath=ResNet_file_path,
+#                               monitor='val_acc',
+#                               verbose=1,
+#                               save_best_only='True',
+#                               mode='max')
+# Res_start = time.time()
+# ResNet_history = ResNet_model.fit_generator(train_data_generator,
+#                                             steps_per_epoch=math.ceil(nb_train_samples/batch_size),
+#                                             epochs=epochs,
+#                                             verbose=2,
+#                                             callbacks=[ResNet_check_point],
+#                                             validation_data=val_data_generator,
+#                                             validation_steps=math.ceil(nb_val_samples/batch_size))
+# Res_end = time.time()
+# Res_time = Res_start - Res_end
+#
+# ResNet_score = ResNet_model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
+# print(ResNet_score[-1])
