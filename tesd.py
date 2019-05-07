@@ -12,7 +12,7 @@ from keras.preprocessing.image import ImageDataGenerator
 
 from numpy.random import seed
 
-img_width, img_height = 64,64
+img_width, img_height = 32,32
 image_dim = (img_width,img_height, 3)
 
 DenseNet_model =DenseNet(image_dim,
@@ -31,9 +31,10 @@ DenseNet_model.get_config()
 # if os.path.exists(ResNet_file_path):
 #     ResNet_model = load_model(ResNet_file_path)
 # else:
-#     ResNet_model = resnet_v2(depth=29,
+# ResNet_model = resnet_v2(depth=38,
 #                              num_classes=1,
 #                              input_shape=image_dim)
+# ResNet_model.summary()
 # ResNet_model.compile(loss='binary_crossentropy',
 #                      optimizer='Adadelta',
 #                      metrics=['accuracy'])

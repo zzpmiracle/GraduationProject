@@ -9,10 +9,11 @@ DenseNet_model = load_model(DenseNet_file_path)
 DenseNet_model.compile(loss='binary_crossentropy',
                        optimizer='Adadelta',
                        metrics=['accuracy'])
-file = 'D:\Event&NoEvent\\test\Even_spec_224\\13_1405874704.0.png'
+file = 'D:\Event&NoEvent\\test\\No_event_spec_224\\background_1368268993.7.png'
 
 img = image.load_img(file,target_size=(img_width, img_height))
 x = image.img_to_array(img)
 x *= 1./255
-result = DenseNet_model.predict(x,batch_size=1)
-print(result)
+x = x.reshape([-1,32,32,3])
+result = DenseNet_model.predict(x)
+print(result<0.5)
