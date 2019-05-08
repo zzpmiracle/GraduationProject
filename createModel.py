@@ -25,7 +25,7 @@ nb_train_samples = 4000
 nb_val_samples = 500
 nb_test_samples = 500
 
-img_width, img_height = 32,32
+img_width, img_height =16,16
 image_dim = (img_width,img_height, 3)
 
 batch_size = 32
@@ -48,12 +48,12 @@ DenseNet_file_path = 'denseNet.hdf5'
 ResNet_file_path = 'ResNet.hdf5'
 
 
-if os.path.exists(DenseNet_file_path):
-    DenseNet_model = load_model(DenseNet_file_path)
-else:
-    DenseNet_model =DenseNet(image_dim,
-                             classes=1,
-                             activation='sigmoid',
+# if os.path.exists(DenseNet_file_path):
+#     DenseNet_model = load_model(DenseNet_file_path)
+# else:
+DenseNet_model =DenseNet(image_dim,
+                         classes=1,
+                         activation='sigmoid',
                              )
 DenseNet_model.compile(loss='binary_crossentropy',
                        optimizer='Adadelta',
