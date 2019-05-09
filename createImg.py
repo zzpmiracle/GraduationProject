@@ -21,7 +21,7 @@ DenseNet_model = load_model(DenseNet_file_path)
 temp_file = 'temp.jpg'
 
 #15s
-l_length = 1*Fs
+l_length = 15*Fs
 begin_time_min ,begin_time_sec = 0 , 0
 conti_flag = False
 while l < len_data-l_length:

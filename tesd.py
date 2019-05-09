@@ -16,18 +16,19 @@ img_width, img_height = 32,32
 image_dim = (img_width,img_height, 3)
 
 DenseNet_model =DenseNet(image_dim,
-                             classes=1,
                          depth=28,
+                         growth_rate=8,
+                             classes=1,
                              activation='sigmoid',
                              )
-DenseNet_model.compile(loss='binary_crossentropy',
-                       optimizer='Adadelta',
-                       metrics=['accuracy'])
+
 
 
 DenseNet_model.summary()
 DenseNet_model.get_config()
-
+# DenseNet_model.compile(loss='binary_crossentropy',
+#                        optimizer='Adadelta',
+#                        metrics=['accuracy'])
 # if os.path.exists(ResNet_file_path):
 #     ResNet_model = load_model(ResNet_file_path)
 # else:
