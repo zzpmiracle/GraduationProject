@@ -301,17 +301,3 @@ def __create_dense_net(nb_classes, img_input, include_top, depth=40, nb_dense_bl
         x = Dense(nb_classes, activation=activation)(x)
 
     return x
-
-
-
-
-if __name__ == '__main__':
-
-    from keras.utils.vis_utils import plot_model
-    #model = DenseNetFCN((32, 32, 3), growth_rate=16, nb_layers_per_block=[4, 5, 7, 10, 12, 15], upsampling_type='deconv')
-    model = DenseNet((32, 32, 3), depth=100, nb_dense_block=3,
-                     growth_rate=12, bottleneck=True, reduction=0.5)
-    model.summary()
-
-    from keras.callbacks import ModelCheckpoint, TensorBoard
-    #plot_model(model, 'test.png', show_shapes=True)

@@ -16,8 +16,8 @@ img_width, img_height = 32,32
 image_dim = (img_width,img_height, 3)
 
 DenseNet_model =DenseNet(image_dim,
-                         depth=28,
-                         growth_rate=8,
+                         depth=40,
+                         growth_rate=4,
                              classes=1,
                              activation='sigmoid',
                              )
