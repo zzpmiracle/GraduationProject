@@ -57,10 +57,4 @@ with open(result_path,'a') as f:
             else:
                 pass
         l = l + l_length
-    # begin_time_min = int(np.floor(l / Fs / 60))
-    # begin_time_sec = int(l / Fs % 60)
-    # end_time_min = int(np.floor((l + l_length) / Fs / 60))
-    # end_time_sec = int((l + l_length) / Fs % 60)
-
-
 
