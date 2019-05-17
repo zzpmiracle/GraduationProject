@@ -11,12 +11,6 @@ from matplotlib import pyplot as plt
 import math
 from keras.preprocessing.image import ImageDataGenerator
 
-from numpy.random import seed
-seed(2)
-
-from tensorflow import set_random_seed
-set_random_seed(2)
-
 train_image_path = 'D:\\Event&NoEvent\\train'
 val_image_path = 'D:\\Event&NoEvent\\validation'
 test_image_path = 'D:\\Event&NoEvent\\test'
@@ -25,7 +19,7 @@ nb_train_samples = 4000
 nb_val_samples = 500
 nb_test_samples = 500
 
-img_width, img_height =16,16
+img_width, img_height =32,32
 image_dim = (img_width,img_height, 3)
 
 batch_size = 32
@@ -54,6 +48,8 @@ ResNet_file_path = 'ResNet.hdf5'
 DenseNet_model =DenseNet(image_dim,
                          classes=1,
                          activation='sigmoid',
+                         depth=40,
+                         growth_rate=2
                              )
 DenseNet_model.compile(loss='binary_crossentropy',
                        optimizer='Adadelta',
@@ -77,6 +73,8 @@ DenseNet_history = DenseNet_model.fit_generator(train_data_generator,
                                                 )
 Dense_end = time.time()
 Dense_time = Dense_end - Dense_start
+DenseNet_score = DenseNet_model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
+print(DenseNet_score[-1])
 
 # # 绘制训练 & 验证的准确率值
 # plt.figure()
@@ -89,9 +87,7 @@ Dense_time = Dense_end - Dense_start
 # plt.legend(loc='best')
 # plt.show()
 
-DenseNet_score = DenseNet_model.evaluate_generator(test_data_generator,steps=math.ceil(nb_test_samples/batch_size))
-print(DenseNet_score[-1])
-#
+
 # if os.path.exists(ResNet_file_path):
 #     ResNet_model = load_model(ResNet_file_path)
 # else:
